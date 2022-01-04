@@ -1,0 +1,10 @@
+digraph D {
+  "1_A" [shape=diamond]
+  "1_B" [shape=box]
+  "1_C" [shape=circle]
+  "1_F" [shape=circle]
+
+  "1_A" -> "1_B" [style=dashed, color=grey]
+  "1_A" -> "1_C" [color="black:invis:black"]
+  "1_A" -> "1_D" [penwidth=5, arrowhead=curve]
+}
