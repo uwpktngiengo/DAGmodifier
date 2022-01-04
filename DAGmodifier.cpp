@@ -3,31 +3,28 @@
 #include "DAGmodifier.h"
 
 // 2nd ---- headers written by me (it should be compilable without everything)
-// nothing
+#include "DAG.h"
+#include "graphModifyingRules.h"
 
 // 3rd ---- 3rd-party headers (API, lib, SDK) (it should be compilable without standard C++ headers)
 // nothing
 
 // 4th ---- standard C++ headers
-// nothing
+#include <cstdlib>
 
 void DAGmodifier::DAGmodifierAlgorithm(void) {
-    std::cout << "program start" << std::endl;
-    /// TODO system("graphviz\\dot.exe -Tpng abc.dot -o krumpli.png");
+    system("graphviz\\dot.exe -Tpng theInputFile.dot -o theInputDAG.png"); // TODO ez (is) legyen parameterezheto!!!
 
-    // az alÃ¡bbit beletenni egy Algorithm::algirthm() fÃ¼ggvÃ©nybe!
-    // legyen paramÃ©terezhetÃµ, config-olhatÃ³, mondjuk egy config-fÃ¡jlbÃ³l!
+    // TODO config-fájl
 
-    Graph gr;
-    gr.openFile("inputGraph.dot"); // dot language
-    gr.generateImage("inputGraphDrawing.png"); // generate png image file
+    DAG* dag = new DAG("theInputFile.dot");
 
-    GraphModifyingRules gmr;
-    gmr.openFile("rules.dat"); // my own custom rule-describing "language"
+    GraphModifyingRules gmr("theRulesToApply.data"); // TODO a fájlpath paraméterezhetõ legyen (config fájl, std::cin, API, paraméteres programindítás, stb.)
+    gmr.applyAllOfTheModifyingRulesOnADAG(dag);
 
-    gr.applyModifyingRules(gmr);
-    gr.exportToFile("outputGraph.dot"); // dot language
-    gr.generateImage("outputGraphDrawing.png"); // generate png image file
+    dag->exportToFile("theOutputFile.dot");
+    system("graphviz\\dot.exe -Tpng theOutputFile.dot -o theOutputDAG.png"); // TODO ez (is) legyen parameterezheto!!!
 
-    std::cout << "program end" << std::endl;
+    delete dag;
+    dag = NULL;
 }

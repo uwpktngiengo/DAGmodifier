@@ -6,5 +6,7 @@ digraph D {
 
   "1_A" -> "1_B" [style=dashed, color=grey]
   "1_A" -> "1_C" [color="black:invis:black"]
+  "1_B" -> "1_C" [color="black:invis:black"]
+  "1_D" -> "1_E" [color="black:invis:black"]
   "1_A" -> "1_D" [penwidth=5, arrowhead=curve]
 }

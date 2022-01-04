@@ -1,0 +1,4 @@
+ruleType1 replaceTriplet A B C with X (input: A, output: C)
+ruleType2 insertBetweenTheseTwo: D E this: Y
+ruleType3 F -> G and H, G -> I and J, H -> J, I -> K and L, new Z (input: F) -> V (output: K) and W (output: L and J)
+# Note: you can add your own customized rules (which should be the same type above but with modified letters), but only if they are the same type as above ones. If it is a new type of rule, you have to modify the source-code (but this is obvious).

@@ -4,10 +4,10 @@
 #define dag_h
 
 // 1st ---- its own header-file (it should be compilable without everything)
-// nothing
+#include "DAGmodifier.h"
 
 // 2nd ---- headers written by me (it should be compilable without everything)
-// nothing
+#include "DAGvertex.h"
 
 // 3rd ---- 3rd-party headers (API, lib, SDK) (it should be compilable without standard C++ headers)
 // nothing
@@ -22,10 +22,11 @@ class DAG {
     public:
         DAG(std::string dotGraphDescribingFilePath);
         ~DAG();
-    private:
+        void exportToFile(std::string outputFilePath);
         std::vector<DAGvertex> vertices;
         bool isThisVertexAlreadyStored(std::string id);
         void addVertex(std::string id);
+    private:
         void addEdge(std::string Vertex1ID, std::string Vertex2ID);
         void parseGraphDotString(std::string str);
     protected:

@@ -12,17 +12,28 @@
 #include <string>
 #include <algorithm>
 
+Type::~Type() {}
+
+Type::Type() {
+    ID = "";
+    type = "";
+}
+
 Type::Type(std::string id) {
     ID = id; // for example: 29_B
-    int pos = id.find("_") + 1;
-    if(pos == 0) { // there is no '_' character in the string named "id"
+    type = convertIDIntoType(id); // for example: B
+}
+
+std::string Type::convertIDIntoType(std::string theID) {
+    int pos = theID.find("_") + 1; // for example: 29_B
+    if(pos == 0) { // there is no '_' character in the string named "theID"
         // TODO warning!
     }
 
-    size_t n = std::count(id.begin(), id.end(), '_');
+    size_t n = std::count(theID.begin(), theID.end(), '_');
     if(n != 1) {
         // TODO warning!
     }
 
-    type = id.substr(pos); // for example: B
+    return theID.substr(pos); // for example: B
 }

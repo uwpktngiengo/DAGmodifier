@@ -3,15 +3,26 @@
 #include "DAGvertex.h"
 
 // 2nd ---- headers written by me (it should be compilable without everything)
-// nothing
+#include "type.h"
 
 // 3rd ---- 3rd-party headers (API, lib, SDK) (it should be compilable without standard C++ headers)
 // nothing
 
 // 4th ---- standard C++ headers
-// nothing
+#include <algorithm>
+#include <string>
+#include <vector>
 
-DAGvertex(std::string id) {
+DAGvertex::DAGvertex(std::string id) {
     Type typ(id);
     t = typ;
+
+    std::vector<std::string> outputIDs_; // TODO
+    outputIDs = outputIDs_; // TODO
+}
+
+void DAGvertex::addOutputVertex(std::string vertexID) {
+    if(std::find(outputIDs.begin(), outputIDs.end(), vertexID) == outputIDs.end()) { // it is not here
+        outputIDs.push_back(vertexID); // add
+    }
 }

@@ -7,21 +7,22 @@
 // nothing
 
 // 2nd ---- headers written by me (it should be compilable without everything)
-// nothing
+#include "type.h"
 
 // 3rd ---- 3rd-party headers (API, lib, SDK) (it should be compilable without standard C++ headers)
 // nothing
 
 // 4th ---- standard C++ headers
-// nothing
+#include <vector>
+#include <string>
 
 class DAGvertex {
     public:
         DAGvertex(std::string id);
-        ~DAGvertex();
         Type t;
+        void addOutputVertex(std::string vertexID);
+        std::vector<std::string> outputIDs;
     private:
-        std::vector<DAGvertex *> outputs;
 
     protected:
 

@@ -13,14 +13,16 @@
 // nothing
 
 // 4th ---- standard C++ headers
-// nothing
+#include <string>
 
 class Type {
     public:
+        Type();
         Type(std::string id);
         ~Type();
         std::string ID; // for example: 29_B
         std::string type; // for example: B
+        static std::string convertIDIntoType(std::string theID); // 29_B -> B
     private:
 
     protected:
