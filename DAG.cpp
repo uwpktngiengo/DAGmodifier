@@ -28,7 +28,6 @@ void DAG::parseGraphDotString(std::string graphStrDot) {
     for (std::string line; std::getline(iss, line); ) {
         bool whiteSpacesOnly = std::all_of(line.begin(), line.end(), isspace);
         if(whiteSpacesOnly) {
-            std::cout << "whiteSpacesOnly 1" << std::endl; // TODO delete this line
             state = NORMAL2;
             continue;
         }
@@ -36,9 +35,7 @@ void DAG::parseGraphDotString(std::string graphStrDot) {
             bool jumpToNextLine = false;
             switch(state) {
                 case NORMAL1:
-                    std::cout << "NORMAL1" << std::endl; // TODO delete this line
                     if(whiteSpacesOnly) {
-                        std::cout << "whiteSpacesOnly 2" << std::endl; // TODO delete this line
                         state = NORMAL2;
                         jumpToNextLine = true; // jump to next line
                     }
@@ -48,7 +45,6 @@ void DAG::parseGraphDotString(std::string graphStrDot) {
                     }
                 break;
                 case VERTEXNAME:
-                    std::cout << "VERTEXNAME" << std::endl; // TODO delete this line
                     if(*it == '\"') {
                         state = NORMAL1;
                         addVertex(tempID);
@@ -60,7 +56,6 @@ void DAG::parseGraphDotString(std::string graphStrDot) {
                     }
                 break;
                 case NORMAL2:
-                    std::cout << "NORMAL2" << std::endl; // TODO delete this line
                     if(*it == '\"') {
                         state = FROMNAME;
 
@@ -69,7 +64,6 @@ void DAG::parseGraphDotString(std::string graphStrDot) {
                     }
                 break;
                 case FROMNAME:
-                    std::cout << "FROMNAME" << std::endl; // TODO delete this line
                     if(*it == '\"') {
                         state = BETWEENFROMANDTO;
                     }
@@ -78,13 +72,11 @@ void DAG::parseGraphDotString(std::string graphStrDot) {
                     }
                 break;
                 case BETWEENFROMANDTO:
-                    std::cout << "BETWEENFROMANDTO" << std::endl; // TODO delete this line
                     if(*it == '\"') {
                         state = TONAME;
                     }
                 break;
                 case TONAME:
-                    std::cout << "TONAME" << std::endl; // TODO delete this line
                     if(*it == '\"') {
                         state = NORMAL2;
                         addEdge(tempVertex1ID, tempVertex2ID);
@@ -129,7 +121,7 @@ bool DAG::isThisVertexAlreadyStored(std::string id) {
 }
 
 void DAG::addVertex(std::string id) {
-    std::cout << "add vertex: " << id << std::endl; // TODO delete this line
+    std::cout << "add vertex: " << id << std::endl; // TODO log-rendszer
     bool alreadyAdded = isThisVertexAlreadyStored(id);
     if(!alreadyAdded) { // avoid duplicates
         DAGvertex dv(id);
@@ -138,7 +130,7 @@ void DAG::addVertex(std::string id) {
 }
 
 void DAG::addEdge(std::string Vertex1ID, std::string Vertex2ID) { // add a directed edge from 1 to 2 (1 -> 2)
-    std::cout << "add edge: " << Vertex1ID << " -> " << Vertex2ID << std::endl; // TODO delete this line
+    std::cout << "add edge: " << Vertex1ID << " -> " << Vertex2ID << std::endl; // TODO log-rendszer
     addVertex(Vertex1ID); // if it is already added, it will do nothing
     addVertex(Vertex2ID); // if it is already added, it will do nothing
 
@@ -177,20 +169,13 @@ void DAG::exportToFile(std::string outputFilePath) {
 }
 
 void DAG::removeEdgesWhichContainsThisVertex(std::string vertexID) {
-    std::cout << "a 1" << std::endl; // TODO delete this line
     for(std::vector<DAGvertex>::iterator it = vertices.begin(); it != vertices.end(); ++it) {
-        std::cout << "a 2" << std::endl; // TODO delete this line
         for(std::vector<std::string>::iterator it2 = (it->outputIDs).begin(); it2 != (it->outputIDs).end(); ) {
-            std::cout << "a 3" << std::endl; // TODO delete this line
             if((*it2) == vertexID) {
-                std::cout << "a 4" << std::endl; // TODO delete this line
                 it2 = (it->outputIDs).erase(it2);
-                std::cout << "a 5" << std::endl; // TODO delete this line
             }
             else {
-                std::cout << "a 6" << std::endl; // TODO delete this line
                 ++it2;
-                std::cout << "a 7" << std::endl; // TODO delete this line
             }
         }
     }

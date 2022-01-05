@@ -147,6 +147,7 @@ void DAGModifyingRules::applyRule1(DAG* d, std::string ruleToApply) {
     }
 
     int howManyTimesApplied = 0; // Note: this could be more than one, and it is also possible to be zero.
+    START_OVER:
     for(std::vector<DAGvertex>::iterator it = (d->vertices).begin(); it != (d->vertices).end(); ++it) {
         if((it->t.type) == firstType) {
             for(std::vector<std::string>::iterator it2 = (it->outputIDs).begin(); it2 != (it->outputIDs).end(); ++it2) {
@@ -191,7 +192,7 @@ void DAGModifyingRules::applyRule1(DAG* d, std::string ruleToApply) {
                                             ((d->vertices).back()).outputIDs.insert(std::end(((d->vertices).back()).outputIDs), std::begin(it5->outputIDs), std::end(it5->outputIDs));
                                         }
                                     }
-std::cout << "krumpli 1" << std::endl;
+
                                     // remove the appropriate A-type vertex
                                     for(std::vector<DAGvertex>::iterator it128 = (d->vertices).begin(); it128 != (d->vertices).end(); ) {
                                         if((it128->t.ID) == (it->t.ID)) {
@@ -201,9 +202,8 @@ std::cout << "krumpli 1" << std::endl;
                                             ++it128;
                                         }
                                     }
-                                    std::cout << "krumpli 2" << std::endl;
                                     d->removeEdgesWhichContainsThisVertex(it->t.ID);
-std::cout << "krumpli 3" << std::endl;
+
                                     // remove the appropriate B-type vertex
                                     for(std::vector<DAGvertex>::iterator it128 = (d->vertices).begin(); it128 != (d->vertices).end(); ) {
                                         if((it128->t.ID) == (*it2)) {
@@ -213,9 +213,8 @@ std::cout << "krumpli 3" << std::endl;
                                             ++it128;
                                         }
                                     }
-                                    std::cout << "krumpli 4" << std::endl;
                                     d->removeEdgesWhichContainsThisVertex(*it2);
-std::cout << "krumpli 5" << std::endl;
+
                                     // remove the appropriate C-type vertex
                                     for(std::vector<DAGvertex>::iterator it128 = (d->vertices).begin(); it128 != (d->vertices).end(); ) {
                                         if((it128->t.ID) == (*it4)) {
@@ -225,18 +224,13 @@ std::cout << "krumpli 5" << std::endl;
                                             ++it128;
                                         }
                                     }
-                                    std::cout << "krumpli 6" << std::endl;
                                     d->removeEdgesWhichContainsThisVertex(*it4);
-std::cout << "krumpli 7" << std::endl;
 
-
-
-
+                                    goto START_OVER; // start over, because the data-structure changed (some of its elements are erased)
                                 }
                             }
                         }
                     }
-
                 }
             }
         }
