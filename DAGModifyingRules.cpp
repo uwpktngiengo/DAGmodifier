@@ -4,6 +4,7 @@
 
 // 2nd ---- headers written by me (it should be compilable without everything)
 #include "type.h"
+#include "log.h"
 
 // 3rd ---- 3rd-party headers (API, lib, SDK) (it should be compilable without standard C++ headers)
 // nothing
@@ -62,7 +63,7 @@ void DAGModifyingRules::applyAllOfTheModifyingRulesOnADAG(DAG* d) {
             applyRule3(d, *it);
         }
         else {
-            // TODO error log, unknown type of rule
+            log::logThis(WARNING, "Unknown type of rule.");
         }
     }
 }
@@ -188,7 +189,7 @@ void DAGModifyingRules::applyRule1(DAG* d, std::string ruleToApply) {
                                     // add C's outputs to X
                                     for(std::vector<DAGvertex>::iterator it5 = (d->vertices).begin(); it5 != (d->vertices).end(); ++it5) {
                                         if((it5->t.ID) == (*it4)) {
-                                            if(((d->vertices).back()).t.ID != theFinalXID) { /* TODO log error! */ }
+                                            if(((d->vertices).back()).t.ID != theFinalXID) { log::logThis(ERROR, "Impossible case. This should not happen."); }
                                             ((d->vertices).back()).outputIDs.insert(std::end(((d->vertices).back()).outputIDs), std::begin(it5->outputIDs), std::end(it5->outputIDs));
                                         }
                                     }
@@ -197,6 +198,8 @@ void DAGModifyingRules::applyRule1(DAG* d, std::string ruleToApply) {
                                     for(std::vector<DAGvertex>::iterator it128 = (d->vertices).begin(); it128 != (d->vertices).end(); ) {
                                         if((it128->t.ID) == (it->t.ID)) {
                                             it128 = (d->vertices).erase(it128);
+                                            log::logThis(LOG, "(A) delete " + (it->t.ID) + " vertex");
+                                            break;
                                         }
                                         else {
                                             ++it128;
@@ -208,6 +211,8 @@ void DAGModifyingRules::applyRule1(DAG* d, std::string ruleToApply) {
                                     for(std::vector<DAGvertex>::iterator it128 = (d->vertices).begin(); it128 != (d->vertices).end(); ) {
                                         if((it128->t.ID) == (*it2)) {
                                             it128 = (d->vertices).erase(it128);
+                                            log::logThis(LOG, "(B) delete " + (*it2) + " vertex");
+                                            break;
                                         }
                                         else {
                                             ++it128;
@@ -219,6 +224,8 @@ void DAGModifyingRules::applyRule1(DAG* d, std::string ruleToApply) {
                                     for(std::vector<DAGvertex>::iterator it128 = (d->vertices).begin(); it128 != (d->vertices).end(); ) {
                                         if((it128->t.ID) == (*it4)) {
                                             it128 = (d->vertices).erase(it128);
+                                            log::logThis(LOG, "(C) delete " + (*it4) + " vertex");
+                                            break;
                                         }
                                         else {
                                             ++it128;
@@ -235,7 +242,7 @@ void DAGModifyingRules::applyRule1(DAG* d, std::string ruleToApply) {
             }
         }
     }
-    std::cout << "Rule-1 applied this many times: [" << howManyTimesApplied << "]." << std::endl; // TODO logrendszer!!!
+    log::logThis(LOG, "Rule-1 applied this many times: [" + std::to_string(howManyTimesApplied) + "].");
 }
 
 void DAGModifyingRules::applyRule2(DAG* d, std::string ruleToApply) {
@@ -316,13 +323,13 @@ void DAGModifyingRules::applyRule2(DAG* d, std::string ruleToApply) {
                     (it->outputIDs).push_back(theFinalYID);
 
                     // add new Y->E directed edge
-                    if(((d->vertices).back()).t.ID != theFinalYID) { /* TODO log error! */ }
+                    if(((d->vertices).back()).t.ID != theFinalYID) { log::logThis(ERROR, "Impossible case. This should not happen."); }
                     ((d->vertices).back()).outputIDs.push_back(oldEVertexID);
                 }
             }
         }
     }
-    std::cout << "Rule-2 applied this many times: [" << howManyTimesApplied << "]." << std::endl; // TODO logrendszer!!!
+    log::logThis(LOG, "Rule-2 applied this many times: [" + std::to_string(howManyTimesApplied) + "].");
 }
 
 void DAGModifyingRules::applyRule3(DAG* d, std::string ruleToApply) {

@@ -3,7 +3,7 @@
 #include "DAG.h"
 
 // 2nd ---- headers written by me (it should be compilable without everything)
-// nothing
+#include "log.h"
 
 // 3rd ---- 3rd-party headers (API, lib, SDK) (it should be compilable without standard C++ headers)
 // nothing
@@ -121,7 +121,7 @@ bool DAG::isThisVertexAlreadyStored(std::string id) {
 }
 
 void DAG::addVertex(std::string id) {
-    std::cout << "add vertex: " << id << std::endl; // TODO log-rendszer
+    log::logThis(LOG, "add vertex: " + id);
     bool alreadyAdded = isThisVertexAlreadyStored(id);
     if(!alreadyAdded) { // avoid duplicates
         DAGvertex dv(id);
@@ -130,7 +130,7 @@ void DAG::addVertex(std::string id) {
 }
 
 void DAG::addEdge(std::string Vertex1ID, std::string Vertex2ID) { // add a directed edge from 1 to 2 (1 -> 2)
-    std::cout << "add edge: " << Vertex1ID << " -> " << Vertex2ID << std::endl; // TODO log-rendszer
+    log::logThis(LOG, "add edge: " + Vertex1ID + " -> " + Vertex2ID);
     addVertex(Vertex1ID); // if it is already added, it will do nothing
     addVertex(Vertex2ID); // if it is already added, it will do nothing
 
@@ -144,7 +144,7 @@ void DAG::addEdge(std::string Vertex1ID, std::string Vertex2ID) { // add a direc
         }
     }
     if(!found) {
-        // TODO error, hibakezeles!!!
+        log::logThis(ERROR, "Tried to add an edge, could not find " + Vertex1ID + " vertex, which is an error, this should not happen.");
     }
 }
 
@@ -172,7 +172,7 @@ void DAG::removeEdgesWhichContainsThisVertex(std::string vertexID) {
     for(std::vector<DAGvertex>::iterator it = vertices.begin(); it != vertices.end(); ++it) {
         for(std::vector<std::string>::iterator it2 = (it->outputIDs).begin(); it2 != (it->outputIDs).end(); ) {
             if((*it2) == vertexID) {
-                it2 = (it->outputIDs).erase(it2);
+                it2 = (it->outputIDs).erase(it2); // delete edge
             }
             else {
                 ++it2;

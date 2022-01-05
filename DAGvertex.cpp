@@ -19,16 +19,16 @@ DAGvertex::DAGvertex() {
     Type typ(id);
     t = typ;
 
-    std::vector<std::string> outputIDs_; // TODO
-    outputIDs = outputIDs_; // TODO
+    std::vector<std::string> outputIDs_;
+    outputIDs = outputIDs_;
 }
 
 DAGvertex::DAGvertex(std::string id) {
     Type typ(id);
     t = typ;
 
-    std::vector<std::string> outputIDs_; // TODO
-    outputIDs = outputIDs_; // TODO
+    std::vector<std::string> outputIDs_;
+    outputIDs = outputIDs_;
 }
 
 void DAGvertex::addOutputVertex(std::string vertexID) {

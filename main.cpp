@@ -4,6 +4,7 @@
 
 // 2nd ---- headers written by me (it should be compilable without everything)
 #include "DAGmodifier.h"
+#include "log.h"
 
 // 3rd ---- 3rd-party headers (API, lib, SDK) (it should be compilable without standard C++ headers)
 // nothing
@@ -13,9 +14,11 @@
 #include <string>
 
 int main(int argc, char** argv) {
-    std::cout << "program start" << std::endl;
+
+    log::logThis(LOG, "program start");
     DAGmodifier::DAGmodifierAlgorithm();
-    std::cout << "program end" << std::endl;
+    log::logThis(LOG, "program end");
+
     return 0;
 }
 

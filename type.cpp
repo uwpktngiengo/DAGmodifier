@@ -26,13 +26,13 @@ Type::Type(std::string id) {
 
 std::string Type::convertIDIntoType(std::string theID) {
     int pos = theID.find("_") + 1; // for example: 29_B
-    if(pos == 0) { // there is no '_' character in the string named "theID"
-        // TODO warning!
+    if(pos == 0) {
+        log::logThis(WARNING, "There is no _ character in the string named theID.");
     }
 
     size_t n = std::count(theID.begin(), theID.end(), '_');
     if(n != 1) {
-        // TODO warning!
+        log::logThis(WARNING, "The number of _ character in the string named theID is not equal to 1.");
     }
 
     return theID.substr(pos); // for example: B
