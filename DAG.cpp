@@ -17,6 +17,11 @@
 #include <fstream>
 #include <vector>
 
+// This function will decide, is this DAG appropriate or not.
+void DAG::checkIntegrity() {
+    // TODO implement this function
+}
+
 void DAG::parseGraphDotString(std::string graphStrDot) {
     enum State state;
     state = NORMAL1;

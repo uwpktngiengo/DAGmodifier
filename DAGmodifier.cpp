@@ -21,6 +21,8 @@ void DAGmodifier::DAGmodifierAlgorithm(void) {
 
     DAG* dag = new DAG(config::inputFilePath);
 
+    dag->checkIntegrity();
+
     DAGModifyingRules gmr(config::modifyingRulesFilePath);
     gmr.applyAllOfTheModifyingRulesOnADAG(dag);
 

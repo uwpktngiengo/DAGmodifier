@@ -27,6 +27,7 @@ class DAG {
         bool isThisVertexAlreadyStored(std::string id);
         void addVertex(std::string id);
         void removeEdgesWhichContainsThisVertex(std::string vertexID);
+        void checkIntegrity();
     private:
         void addEdge(std::string Vertex1ID, std::string Vertex2ID);
         void parseGraphDotString(std::string str);

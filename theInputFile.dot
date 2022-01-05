@@ -15,3 +15,5 @@ digraph D {
   "1_N" -> "1_K" [penwidth=5, arrowhead=curve]
   "1_M" -> "1_K" [penwidth=5, arrowhead=curve]
 }
+
+# TODO ezt jól kitalálni
