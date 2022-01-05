@@ -13,6 +13,16 @@
 #include <string>
 #include <vector>
 
+DAGvertex::DAGvertex() {
+    std::string id = "undefined";
+
+    Type typ(id);
+    t = typ;
+
+    std::vector<std::string> outputIDs_; // TODO
+    outputIDs = outputIDs_; // TODO
+}
+
 DAGvertex::DAGvertex(std::string id) {
     Type typ(id);
     t = typ;
@@ -25,4 +35,9 @@ void DAGvertex::addOutputVertex(std::string vertexID) {
     if(std::find(outputIDs.begin(), outputIDs.end(), vertexID) == outputIDs.end()) { // it is not here
         outputIDs.push_back(vertexID); // add
     }
+}
+
+void DAGvertex::operator=(const DAGvertex &D) {
+    t = D.t;
+    outputIDs = D.outputIDs;
 }

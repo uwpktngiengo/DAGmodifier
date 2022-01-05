@@ -19,6 +19,8 @@ int main(int argc, char** argv) {
     return 0;
 }
 
+// TODO írja ki a futásidőt
+
 // TODO dokumentáció-írás, log kezelő (log, warning, error, esetleg színkezelés), config fájlban beállítások
 
 // TODO -> leírni a dokumentációba, hogy a "dot" nyelvnek én egy általam kitalált, szigorított/szűkített változatát használom, és hogy a bemenethez képest a kimenet szegényesebb lesz (pl. a formázások eltűnnek)

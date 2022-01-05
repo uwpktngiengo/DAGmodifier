@@ -37,3 +37,8 @@ std::string Type::convertIDIntoType(std::string theID) {
 
     return theID.substr(pos); // for example: B
 }
+
+void Type::operator=(const Type &t) {
+    ID = t.ID;
+    type = t.type;
+}

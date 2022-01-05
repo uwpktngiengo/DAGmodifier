@@ -1,6 +1,6 @@
 
 // 1st ---- its own header-file (it should be compilable without everything)
-#include "graphModifyingRules.h"
+#include "DAGModifyingRules.h"
 
 // 2nd ---- headers written by me (it should be compilable without everything)
 #include "type.h"
@@ -16,23 +16,23 @@
 #include <iostream>
 #include <fstream>
 
-GraphModifyingRules::~GraphModifyingRules() {
+DAGModifyingRules::~DAGModifyingRules() {
 
 }
 
-GraphModifyingRules::GraphModifyingRules(std::string pathToGraphModifyingRulesFile) {
-    std::string contentOfFile = readFile(pathToGraphModifyingRulesFile);
+DAGModifyingRules::DAGModifyingRules(std::string pathToDAGModifyingRulesFile) {
+    std::string contentOfFile = readFile(pathToDAGModifyingRulesFile);
     parseFile(contentOfFile);
 }
 
-std::string GraphModifyingRules::readFile(std::string pathToFile) {
+std::string DAGModifyingRules::readFile(std::string pathToFile) {
     std::ifstream t(pathToFile);
     std::stringstream buffer;
     buffer << t.rdbuf();
     return buffer.str();
 }
 
-void GraphModifyingRules::parseFile(std::string contentOfFile) {
+void DAGModifyingRules::parseFile(std::string contentOfFile) {
     std::istringstream iss(contentOfFile);
     for (std::string line; std::getline(iss, line); ) {
         std::size_t found = line.find_first_not_of(" \t"); // first non-whitespace
@@ -50,7 +50,7 @@ void GraphModifyingRules::parseFile(std::string contentOfFile) {
     }
 }
 
-void GraphModifyingRules::applyAllOfTheModifyingRulesOnADAG(DAG* d) {
+void DAGModifyingRules::applyAllOfTheModifyingRulesOnADAG(DAG* d) {
     for(std::vector<std::string>::iterator it = rules.begin(); it != rules.end(); ++it) {
         if((*it).rfind("ruleType1 replaceTriplet ", 0) == 0) {
             applyRule1(d, *it);
@@ -67,7 +67,7 @@ void GraphModifyingRules::applyAllOfTheModifyingRulesOnADAG(DAG* d) {
     }
 }
 
-void GraphModifyingRules::applyRule1(DAG* d, std::string ruleToApply) {
+void DAGModifyingRules::applyRule1(DAG* d, std::string ruleToApply) {
     // TODO figyelni az ID-kra, ha valamelyik szám már foglalt, akkor megnövelni a számot!!!
     ruleToApply.erase(ruleToApply.begin(), std::find_if(ruleToApply.begin(), ruleToApply.end(), std::bind1st(std::not_equal_to<char>(), ' '))); // remove leading whitespaces
     ruleToApply.erase(std::find_if(ruleToApply.rbegin(), ruleToApply.rend(), std::bind1st(std::not_equal_to<char>(), ' ')).base(), ruleToApply.end()); // remove trailing whitespaces
@@ -159,7 +159,79 @@ void GraphModifyingRules::applyRule1(DAG* d, std::string ruleToApply) {
                                 std::string theTyp2 = Type::convertIDIntoType(*it4); // 29_B -> B
                                 if(theTyp2 == thirdType) {
                                     howManyTimesApplied++;
-                                    // TODO végrehajtani a módosítást
+
+                                    // add new X-type vertex
+                                    std::string theFinalXID = "";
+                                    while(true) {
+                                        unsigned int i = 1;
+                                        std::string number = std::to_string(i);
+
+                                        bool alreadyTaken = d->isThisVertexAlreadyStored(number + "_X"); // for example: "1_X" or "17_X"
+                                        if(!alreadyTaken) {
+                                            d->addVertex(number + "_X"); // for example: "1_X" or "17_X"
+                                            theFinalXID = number + "_X";
+                                            break; // exit the infinite while-loop
+                                        }
+                                        i++; // jump to the next possible X, maybe that one is not already taken
+                                    }
+
+                                    // add A's inputs to X
+                                    for(std::vector<DAGvertex>::iterator it5 = (d->vertices).begin(); it5 != (d->vertices).end(); ++it5) {
+                                        for(std::vector<std::string>::iterator it6 = (it5->outputIDs).begin(); it6 != (it5->outputIDs).end(); ++it6) {
+                                            if((*it6) == (it->t.ID)) {
+                                                it5->outputIDs.push_back(theFinalXID);
+                                            }
+                                        }
+                                    }
+
+                                    // add C's outputs to X
+                                    for(std::vector<DAGvertex>::iterator it5 = (d->vertices).begin(); it5 != (d->vertices).end(); ++it5) {
+                                        if((it5->t.ID) == (*it4)) {
+                                            if(((d->vertices).back()).t.ID != theFinalXID) { /* TODO log error! */ }
+                                            ((d->vertices).back()).outputIDs.insert(std::end(((d->vertices).back()).outputIDs), std::begin(it5->outputIDs), std::end(it5->outputIDs));
+                                        }
+                                    }
+std::cout << "krumpli 1" << std::endl;
+                                    // remove the appropriate A-type vertex
+                                    for(std::vector<DAGvertex>::iterator it128 = (d->vertices).begin(); it128 != (d->vertices).end(); ) {
+                                        if((it128->t.ID) == (it->t.ID)) {
+                                            it128 = (d->vertices).erase(it128);
+                                        }
+                                        else {
+                                            ++it128;
+                                        }
+                                    }
+                                    std::cout << "krumpli 2" << std::endl;
+                                    d->removeEdgesWhichContainsThisVertex(it->t.ID);
+std::cout << "krumpli 3" << std::endl;
+                                    // remove the appropriate B-type vertex
+                                    for(std::vector<DAGvertex>::iterator it128 = (d->vertices).begin(); it128 != (d->vertices).end(); ) {
+                                        if((it128->t.ID) == (*it2)) {
+                                            it128 = (d->vertices).erase(it128);
+                                        }
+                                        else {
+                                            ++it128;
+                                        }
+                                    }
+                                    std::cout << "krumpli 4" << std::endl;
+                                    d->removeEdgesWhichContainsThisVertex(*it2);
+std::cout << "krumpli 5" << std::endl;
+                                    // remove the appropriate C-type vertex
+                                    for(std::vector<DAGvertex>::iterator it128 = (d->vertices).begin(); it128 != (d->vertices).end(); ) {
+                                        if((it128->t.ID) == (*it4)) {
+                                            it128 = (d->vertices).erase(it128);
+                                        }
+                                        else {
+                                            ++it128;
+                                        }
+                                    }
+                                    std::cout << "krumpli 6" << std::endl;
+                                    d->removeEdgesWhichContainsThisVertex(*it4);
+std::cout << "krumpli 7" << std::endl;
+
+
+
+
                                 }
                             }
                         }
@@ -172,8 +244,7 @@ void GraphModifyingRules::applyRule1(DAG* d, std::string ruleToApply) {
     std::cout << "Rule-1 applied this many times: [" << howManyTimesApplied << "]." << std::endl; // TODO logrendszer!!!
 }
 
-void GraphModifyingRules::applyRule2(DAG* d, std::string ruleToApply) {
-    // TODO figyelni az ID-kra, ha valamelyik szám már foglalt, akkor megnövelni a számot!!!
+void DAGModifyingRules::applyRule2(DAG* d, std::string ruleToApply) {
     ruleToApply.erase(ruleToApply.begin(), std::find_if(ruleToApply.begin(), ruleToApply.end(), std::bind1st(std::not_equal_to<char>(), ' '))); // remove leading whitespaces
     ruleToApply.erase(std::find_if(ruleToApply.rbegin(), ruleToApply.rend(), std::bind1st(std::not_equal_to<char>(), ' ')).base(), ruleToApply.end()); // remove trailing whitespaces
 
@@ -260,7 +331,7 @@ void GraphModifyingRules::applyRule2(DAG* d, std::string ruleToApply) {
     std::cout << "Rule-2 applied this many times: [" << howManyTimesApplied << "]." << std::endl; // TODO logrendszer!!!
 }
 
-void GraphModifyingRules::applyRule3(DAG* d, std::string ruleToApply) {
+void DAGModifyingRules::applyRule3(DAG* d, std::string ruleToApply) {
     // TODO figyelni az ID-kra, ha valamelyik szám már foglalt, akkor megnövelni a számot!!!
     ruleToApply.erase(ruleToApply.begin(), std::find_if(ruleToApply.begin(), ruleToApply.end(), std::bind1st(std::not_equal_to<char>(), ' '))); // remove leading whitespaces
     ruleToApply.erase(std::find_if(ruleToApply.rbegin(), ruleToApply.rend(), std::bind1st(std::not_equal_to<char>(), ' ')).base(), ruleToApply.end()); // remove trailing whitespaces
@@ -268,7 +339,7 @@ void GraphModifyingRules::applyRule3(DAG* d, std::string ruleToApply) {
     // TODO implementálni
 }
 
-void GraphModifyingRules::removeSubstring(std::string& str, std::string subStr) {
+void DAGModifyingRules::removeSubstring(std::string& str, std::string subStr) {
     std::string::size_type i = str.find(subStr);
     if(i != std::string::npos) {
         str.erase(i, subStr.length());

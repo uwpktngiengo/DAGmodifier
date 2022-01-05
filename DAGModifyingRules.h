@@ -1,7 +1,7 @@
 
 // include guard
-#ifndef graph_modifying_rules_h
-#define graph_modifying_rules_h
+#ifndef dag_modifying_rules_h
+#define dag_modifying_rules_h
 
 // 1st ---- its own header-file (it should be compilable without everything)
 // nothing
@@ -16,10 +16,10 @@
 #include <string>
 #include <vector>
 
-class GraphModifyingRules {
+class DAGModifyingRules {
     public:
-        GraphModifyingRules(std::string pathToGraphModifyingRulesFile);
-        ~GraphModifyingRules();
+        DAGModifyingRules(std::string pathToDAGModifyingRulesFile);
+        ~DAGModifyingRules();
         void applyAllOfTheModifyingRulesOnADAG(DAG* d);
     private:
         std::string readFile(std::string pathToFile);
@@ -34,4 +34,4 @@ class GraphModifyingRules {
 
 };
 
-#endif // graph_modifying_rules_h
+#endif // dag_modifying_rules_h

@@ -18,10 +18,12 @@
 
 class DAGvertex {
     public:
+        DAGvertex();
         DAGvertex(std::string id);
         Type t;
         void addOutputVertex(std::string vertexID);
         std::vector<std::string> outputIDs;
+        void operator=(const DAGvertex &D);
     private:
 
     protected:

@@ -23,6 +23,7 @@ class Type {
         std::string ID; // for example: 29_B
         std::string type; // for example: B
         static std::string convertIDIntoType(std::string theID); // 29_B -> B
+        void operator=(const Type &t);
     private:
 
     protected:

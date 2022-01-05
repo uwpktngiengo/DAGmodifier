@@ -4,7 +4,7 @@
 
 // 2nd ---- headers written by me (it should be compilable without everything)
 #include "DAG.h"
-#include "graphModifyingRules.h"
+#include "DAGModifyingRules.h"
 
 // 3rd ---- 3rd-party headers (API, lib, SDK) (it should be compilable without standard C++ headers)
 // nothing
@@ -19,7 +19,7 @@ void DAGmodifier::DAGmodifierAlgorithm(void) {
 
     DAG* dag = new DAG("theInputFile.dot");
 
-    GraphModifyingRules gmr("theRulesToApply.data"); // TODO a fájlpath paraméterezhetõ legyen (config fájl, std::cin, API, paraméteres programindítás, stb.)
+    DAGModifyingRules gmr("theRulesToApply.data"); // TODO a fájlpath paraméterezhetõ legyen (config fájl, std::cin, API, paraméteres programindítás, stb.)
     gmr.applyAllOfTheModifyingRulesOnADAG(dag);
 
     dag->exportToFile("theOutputFile.dot");

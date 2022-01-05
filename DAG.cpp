@@ -14,6 +14,7 @@
 #include <algorithm>
 #include <iostream>
 #include <fstream>
+#include <vector>
 
 void DAG::parseGraphDotString(std::string graphStrDot) {
     enum State state;
@@ -173,4 +174,24 @@ void DAG::exportToFile(std::string outputFilePath) {
     std::ofstream fileHandler("theOutputFile.dot"); // TODO ez (is) legyen parameterezheto!!! (config fajl)
     fileHandler << outputFileContent;
     fileHandler.close();
+}
+
+void DAG::removeEdgesWhichContainsThisVertex(std::string vertexID) {
+    std::cout << "a 1" << std::endl; // TODO delete this line
+    for(std::vector<DAGvertex>::iterator it = vertices.begin(); it != vertices.end(); ++it) {
+        std::cout << "a 2" << std::endl; // TODO delete this line
+        for(std::vector<std::string>::iterator it2 = (it->outputIDs).begin(); it2 != (it->outputIDs).end(); ) {
+            std::cout << "a 3" << std::endl; // TODO delete this line
+            if((*it2) == vertexID) {
+                std::cout << "a 4" << std::endl; // TODO delete this line
+                it2 = (it->outputIDs).erase(it2);
+                std::cout << "a 5" << std::endl; // TODO delete this line
+            }
+            else {
+                std::cout << "a 6" << std::endl; // TODO delete this line
+                ++it2;
+                std::cout << "a 7" << std::endl; // TODO delete this line
+            }
+        }
+    }
 }
