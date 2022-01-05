@@ -5,6 +5,7 @@
 // 2nd ---- headers written by me (it should be compilable without everything)
 #include "DAG.h"
 #include "DAGModifyingRules.h"
+#include "config.h"
 
 // 3rd ---- 3rd-party headers (API, lib, SDK) (it should be compilable without standard C++ headers)
 // nothing
@@ -13,18 +14,23 @@
 #include <cstdlib>
 
 void DAGmodifier::DAGmodifierAlgorithm(void) {
-    system("graphviz\\dot.exe -Tpng theInputFile.dot -o theInputDAG.png"); // TODO ez (is) legyen parameterezheto!!!
+    if(config::drawGraphImagesEnabled) {
+        std::string cmd = config::drawGraphImageExternalProgramPath + " -Tpng " + config::inputFilePath + " -o " + config::inputFileDrawImagePath;
+        system(cmd.c_str());
+    }
 
-    // TODO config-fájl
+    DAG* dag = new DAG(config::inputFilePath);
 
-    DAG* dag = new DAG("theInputFile.dot");
-
-    DAGModifyingRules gmr("theRulesToApply.data"); // TODO a fájlpath paraméterezhetõ legyen (config fájl, std::cin, API, paraméteres programindítás, stb.)
+    DAGModifyingRules gmr(config::modifyingRulesFilePath);
     gmr.applyAllOfTheModifyingRulesOnADAG(dag);
 
-    dag->exportToFile("theOutputFile.dot");
-    system("graphviz\\dot.exe -Tpng theOutputFile.dot -o theOutputDAG.png"); // TODO ez (is) legyen parameterezheto!!!
+    dag->exportToFile(config::outputFilePath);
+
+    if(config::drawGraphImagesEnabled) {
+        std::string cmd = config::drawGraphImageExternalProgramPath + " -Tpng " + config::outputFilePath + " -o " + config::outputFileDrawImagePath;
+        system(cmd.c_str());
+    }
 
     delete dag;
-    dag = NULL;
+    dag = NULL; // just to be sure :-)
 }

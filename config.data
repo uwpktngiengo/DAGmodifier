@@ -1,0 +1,8 @@
+drawGraphImagesEnabled = true
+drawGraphImageExternalProgramPath = graphviz\\dot.exe
+inputFilePath = theInputFile.dot
+outputFilePath = theOutputFile.dot
+inputFileDrawImagePath = theInputDAG.png
+outputFileDrawImagePath = theOutputDAG.png
+logfilePath = logfile.txt
+modifyingRulesFilePath = theRulesToApply.data

@@ -3,7 +3,7 @@
 #include "type.h"
 
 // 2nd ---- headers written by me (it should be compilable without everything)
-// nothing
+#include "log.h"
 
 // 3rd ---- 3rd-party headers (API, lib, SDK) (it should be compilable without standard C++ headers)
 // nothing

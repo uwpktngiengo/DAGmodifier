@@ -9,4 +9,9 @@ digraph D {
   "1_B" -> "1_C" [color="black:invis:black"]
   "1_D" -> "1_E" [color="black:invis:black"]
   "1_A" -> "1_D" [penwidth=5, arrowhead=curve]
+  "1_IN" -> "1_N" [penwidth=5, arrowhead=curve]
+  "2_IN" -> "1_M" [penwidth=5, arrowhead=curve]
+  "1_K" -> "1_OUT" [penwidth=5, arrowhead=curve]
+  "1_N" -> "1_K" [penwidth=5, arrowhead=curve]
+  "1_M" -> "1_K" [penwidth=5, arrowhead=curve]
 }

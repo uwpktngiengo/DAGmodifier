@@ -4,6 +4,7 @@
 
 // 2nd ---- headers written by me (it should be compilable without everything)
 #include "log.h"
+#include "config.h"
 
 // 3rd ---- 3rd-party headers (API, lib, SDK) (it should be compilable without standard C++ headers)
 // nothing
@@ -163,7 +164,7 @@ void DAG::exportToFile(std::string outputFilePath) {
     }
     outputFileContent += "}\n";
 
-    std::ofstream fileHandler("theOutputFile.dot"); // TODO ez (is) legyen parameterezheto!!! (config fajl)
+    std::ofstream fileHandler(config::outputFilePath);
     fileHandler << outputFileContent;
     fileHandler.close();
 }

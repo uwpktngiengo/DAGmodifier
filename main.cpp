@@ -5,15 +5,20 @@
 // 2nd ---- headers written by me (it should be compilable without everything)
 #include "DAGmodifier.h"
 #include "log.h"
+#include "config.h"
 
 // 3rd ---- 3rd-party headers (API, lib, SDK) (it should be compilable without standard C++ headers)
 // nothing
 
 // 4th ---- standard C++ headers
-#include <iostream>
-#include <string>
+// nothing
+
+// TODO std::cin, API, paraméteres programindítás, stb.
 
 int main(int argc, char** argv) {
+    // This program is a "rule based graph modifier", written in C++.
+
+    config::processConfigFile("config.data");
 
     log::logThis(LOG, "program start");
     DAGmodifier::DAGmodifierAlgorithm();
@@ -21,10 +26,6 @@ int main(int argc, char** argv) {
 
     return 0;
 }
-
-// TODO írja ki a futásidőt
-
-// TODO dokumentáció-írás, log kezelő (log, warning, error, esetleg színkezelés), config fájlban beállítások
 
 // TODO -> leírni a dokumentációba, hogy a "dot" nyelvnek én egy általam kitalált, szigorított/szűkített változatát használom, és hogy a bemenethez képest a kimenet szegényesebb lesz (pl. a formázások eltűnnek)
 // TODO -> azt is beleírni a dokumentációba, hogy ha nem változtatunk semmit, a kimeneti gráf akkor is más lesz leírónyelvileg (eltűnnek a formázások, és az elején minden csúcs fel lesz sorolva, nem csak néhány) (és rajzilag is, mert eltűnnek a formázások)

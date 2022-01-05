@@ -4,7 +4,7 @@
 #define dag_h
 
 // 1st ---- its own header-file (it should be compilable without everything)
-#include "DAGmodifier.h"
+// nothing
 
 // 2nd ---- headers written by me (it should be compilable without everything)
 #include "DAGvertex.h"
