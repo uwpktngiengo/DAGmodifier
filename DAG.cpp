@@ -31,10 +31,19 @@ void DAG::parseGraphDotString(std::string graphStrDot) {
     std::string tempVertex2ID = "";
 
     std::istringstream iss(graphStrDot);
+    log::logThis(LOG, "--- 1st part of DAG describing file parsing (vertices) ---");
     for (std::string line; std::getline(iss, line); ) {
+        log::logThis(LOG, "Parsing a line of the input DAG describing file...");
         bool whiteSpacesOnly = std::all_of(line.begin(), line.end(), isspace);
+
+        int pos = line.find("}") + 1;
+        if(pos != 0) {
+            break;
+        }
+
         if(whiteSpacesOnly) {
             state = NORMAL2;
+            log::logThis(LOG, "--- 2nd part of DAG describing file parsing (edges) ---");
             continue;
         }
         for(auto it = line.cbegin(); it != line.cend(); ++it) {
@@ -43,6 +52,7 @@ void DAG::parseGraphDotString(std::string graphStrDot) {
                 case NORMAL1:
                     if(whiteSpacesOnly) {
                         state = NORMAL2;
+                        log::logThis(LOG, "--- 2nd part of DAG describing file parsing (edges) ---");
                         jumpToNextLine = true; // jump to next line
                     }
                     else if(*it == '\"') {
@@ -100,6 +110,7 @@ void DAG::parseGraphDotString(std::string graphStrDot) {
             }
         }
     }
+    log::logThis(LOG, "--- end of DAG-describing-file-parsing ---");
 }
 
 DAG::DAG(std::string dotGraphDescribingFilePath) { // the variable named "dotGraphDescribingFilePath" contains a path to a file, which file is written in "dot" language, which describes a graph, which is actually a DAG

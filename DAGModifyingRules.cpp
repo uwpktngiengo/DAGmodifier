@@ -69,7 +69,6 @@ void DAGModifyingRules::applyAllOfTheModifyingRulesOnADAG(DAG* d) {
 }
 
 void DAGModifyingRules::applyRule1(DAG* d, std::string ruleToApply) {
-    // TODO figyelni az ID-kra, ha valamelyik szám már foglalt, akkor megnövelni a számot!!!
     ruleToApply.erase(ruleToApply.begin(), std::find_if(ruleToApply.begin(), ruleToApply.end(), std::bind1st(std::not_equal_to<char>(), ' '))); // remove leading whitespaces
     ruleToApply.erase(std::find_if(ruleToApply.rbegin(), ruleToApply.rend(), std::bind1st(std::not_equal_to<char>(), ' ')).base(), ruleToApply.end()); // remove trailing whitespaces
 
@@ -162,7 +161,12 @@ void DAGModifyingRules::applyRule1(DAG* d, std::string ruleToApply) {
                                 if(theTyp2 == thirdType) {
                                     howManyTimesApplied++;
 
+                                    std::string theGivenA = (it->t.ID);
+                                    std::string theGivenB = (*it2);
+                                    std::string theGivenC = (*it4);
+
                                     // add new X-type vertex
+                                    log::logThis(LOG, "apply rule 1, add new X-type vertex");
                                     std::string theFinalXID = "";
                                     while(true) {
                                         unsigned int i = 1;
@@ -176,62 +180,76 @@ void DAGModifyingRules::applyRule1(DAG* d, std::string ruleToApply) {
                                         }
                                         i++; // jump to the next possible X, maybe that one is not already taken
                                     }
+                                    log::logThis(LOG, "new X vertex's name: " + theFinalXID);
 
                                     // add A's inputs to X
+                                    log::logThis(LOG, "apply rule 1, add A's inputs to X (A: " + theGivenA + ")");
+                                    int skipThisMany = 0;
+                                    AGAIN:
+                                    int i = 0;
                                     for(std::vector<DAGvertex>::iterator it5 = (d->vertices).begin(); it5 != (d->vertices).end(); ++it5) {
                                         for(std::vector<std::string>::iterator it6 = (it5->outputIDs).begin(); it6 != (it5->outputIDs).end(); ++it6) {
-                                            if((*it6) == (it->t.ID)) {
-                                                it5->outputIDs.push_back(theFinalXID);
+                                            if((*it6) == theGivenA) {
+                                                i++;
+                                                if(i > skipThisMany) {
+                                                    it5->outputIDs.push_back(theFinalXID);
+                                                    skipThisMany++;
+                                                    goto AGAIN;
+                                                }
                                             }
                                         }
                                     }
 
                                     // add C's outputs to X
+                                    log::logThis(LOG, "apply rule 1, add C's outputs to X (C: " + theGivenC + ")");
                                     for(std::vector<DAGvertex>::iterator it5 = (d->vertices).begin(); it5 != (d->vertices).end(); ++it5) {
-                                        if((it5->t.ID) == (*it4)) {
+                                        if((it5->t.ID) == theGivenC) {
                                             if(((d->vertices).back()).t.ID != theFinalXID) { log::logThis(ERROR, "Impossible case. This should not happen."); }
                                             ((d->vertices).back()).outputIDs.insert(std::end(((d->vertices).back()).outputIDs), std::begin(it5->outputIDs), std::end(it5->outputIDs));
                                         }
                                     }
 
                                     // remove the appropriate A-type vertex
+                                    log::logThis(LOG, "apply rule 1, remove appropriate A-type vertex: " + theGivenA);
                                     for(std::vector<DAGvertex>::iterator it128 = (d->vertices).begin(); it128 != (d->vertices).end(); ) {
-                                        if((it128->t.ID) == (it->t.ID)) {
+                                        if((it128->t.ID) == theGivenA) {
                                             it128 = (d->vertices).erase(it128);
-                                            log::logThis(LOG, "(A) delete " + (it->t.ID) + " vertex");
+                                            log::logThis(LOG, "(A) delete " + theGivenA + " vertex");
                                             break;
                                         }
                                         else {
                                             ++it128;
                                         }
                                     }
-                                    d->removeEdgesWhichContainsThisVertex(it->t.ID);
+                                    d->removeEdgesWhichContainsThisVertex(theGivenA);
 
                                     // remove the appropriate B-type vertex
+                                    log::logThis(LOG, "apply rule 1, remove appropriate B-type vertex: " + theGivenB);
                                     for(std::vector<DAGvertex>::iterator it128 = (d->vertices).begin(); it128 != (d->vertices).end(); ) {
-                                        if((it128->t.ID) == (*it2)) {
+                                        if((it128->t.ID) == theGivenB) {
                                             it128 = (d->vertices).erase(it128);
-                                            log::logThis(LOG, "(B) delete " + (*it2) + " vertex");
+                                            log::logThis(LOG, "(B) delete " + theGivenB + " vertex");
                                             break;
                                         }
                                         else {
                                             ++it128;
                                         }
                                     }
-                                    d->removeEdgesWhichContainsThisVertex(*it2);
+                                    d->removeEdgesWhichContainsThisVertex(theGivenB);
 
                                     // remove the appropriate C-type vertex
+                                    log::logThis(LOG, "apply rule 1, remove appropriate C-type vertex: " + theGivenC);
                                     for(std::vector<DAGvertex>::iterator it128 = (d->vertices).begin(); it128 != (d->vertices).end(); ) {
-                                        if((it128->t.ID) == (*it4)) {
+                                        if((it128->t.ID) == theGivenC) {
                                             it128 = (d->vertices).erase(it128);
-                                            log::logThis(LOG, "(C) delete " + (*it4) + " vertex");
+                                            log::logThis(LOG, "(C) delete " + theGivenC + " vertex");
                                             break;
                                         }
                                         else {
                                             ++it128;
                                         }
                                     }
-                                    d->removeEdgesWhichContainsThisVertex(*it4);
+                                    d->removeEdgesWhichContainsThisVertex(theGivenC);
 
                                     goto START_OVER; // start over, because the data-structure changed (some of its elements are erased)
                                 }
