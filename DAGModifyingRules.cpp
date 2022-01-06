@@ -359,7 +359,7 @@ void DAGModifyingRules::applyRule2(DAG* d, std::string ruleToApply) {
 }
 
 void DAGModifyingRules::applyRule3(DAG* d, std::string ruleToApply) {
-    // TODO In case we add new vertices, we should take care of numbers in IDs, because it is already taken, number should increment.
+    // TODO In case we add new vertices, we should take care of numbers in IDs, because if it is already taken, number should increment.
     ruleToApply.erase(ruleToApply.begin(), std::find_if(ruleToApply.begin(), ruleToApply.end(), std::bind1st(std::not_equal_to<char>(), ' '))); // remove leading whitespaces
     ruleToApply.erase(std::find_if(ruleToApply.rbegin(), ruleToApply.rend(), std::bind1st(std::not_equal_to<char>(), ' ')).base(), ruleToApply.end()); // remove trailing whitespaces
 
