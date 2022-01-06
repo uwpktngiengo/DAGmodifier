@@ -24,6 +24,3 @@ int main(int argc, char** argv) {
 
     return 0;
 }
-
-// TODO a dokumentacioba tenni kepet a bemeno es kimeno graf legeneralt rajzarol!
-// TODO az eredeti bemeneti gráf helyett kitalálni egy másikat

@@ -202,10 +202,18 @@ void DAGModifyingRules::applyRule1(DAG* d, std::string ruleToApply) {
 
                                     // add C's outputs to X
                                     log::logThis(LOG, "apply rule 1, add C's outputs to X (C: " + theGivenC + ")");
+                                    skipThisMany = 0;
+                                    AGAIN2:
+                                    i = 0;
                                     for(std::vector<DAGvertex>::iterator it5 = (d->vertices).begin(); it5 != (d->vertices).end(); ++it5) {
                                         if((it5->t.ID) == theGivenC) {
-                                            if(((d->vertices).back()).t.ID != theFinalXID) { log::logThis(ERROR, "Impossible case. This should not happen."); }
-                                            ((d->vertices).back()).outputIDs.insert(std::end(((d->vertices).back()).outputIDs), std::begin(it5->outputIDs), std::end(it5->outputIDs));
+                                            i++;
+                                            if(i > skipThisMany) {
+                                                if(((d->vertices).back()).t.ID != theFinalXID) { log::logThis(ERROR, "Impossible case. This should not happen."); }
+                                                ((d->vertices).back()).outputIDs.insert(std::end(((d->vertices).back()).outputIDs), std::begin(it5->outputIDs), std::end(it5->outputIDs));
+                                                skipThisMany++;
+                                                goto AGAIN2;
+                                            }
                                         }
                                     }
 
@@ -351,11 +359,11 @@ void DAGModifyingRules::applyRule2(DAG* d, std::string ruleToApply) {
 }
 
 void DAGModifyingRules::applyRule3(DAG* d, std::string ruleToApply) {
-    // TODO figyelni az ID-kra, ha valamelyik szám már foglalt, akkor megnövelni a számot!!!
+    // TODO In case we add new vertices, we should take care of numbers in IDs, because it is already taken, number should increment.
     ruleToApply.erase(ruleToApply.begin(), std::find_if(ruleToApply.begin(), ruleToApply.end(), std::bind1st(std::not_equal_to<char>(), ' '))); // remove leading whitespaces
     ruleToApply.erase(std::find_if(ruleToApply.rbegin(), ruleToApply.rend(), std::bind1st(std::not_equal_to<char>(), ' ')).base(), ruleToApply.end()); // remove trailing whitespaces
 
-    // TODO implementálni
+    // TODO implement this function
 }
 
 void DAGModifyingRules::removeSubstring(std::string& str, std::string subStr) {

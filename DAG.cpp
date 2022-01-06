@@ -19,7 +19,36 @@
 
 // This function will decide, is this DAG appropriate or not.
 void DAG::checkIntegrity() {
-    // TODO implement this function
+    log::logThis(LOG, "Checking DAG's integrity and validity...");
+
+    for(std::vector<DAGvertex>::iterator it = vertices.begin(); it != vertices.end(); ++it) {
+        if((it->outputIDs.size() == 0) && (it->t.type != "OUT")) {
+            log::logThis(ERROR, "Input DAG is invalid. (If a vertex has no edges going out to other vertices, that must be an OUT type vertex.)");
+            return;
+        }
+        else if(it->t.type == "IN") {
+            if(it->outputIDs.size() < 1) {
+                log::logThis(ERROR, "Input DAG is invalid. (A vertex with IN type must have at least one edge out to other vertices.)");
+                return;
+            }
+        }
+        else if(it->t.type == "OUT") {
+            bool found = false;
+            for(std::vector<DAGvertex>::iterator it2 = vertices.begin(); it2 != vertices.end(); ++it2) {
+                for(std::vector<std::string>::iterator it3 = it2->outputIDs.begin(); it3 != it2->outputIDs.end(); ++it3) {
+                    if((*it3) == it->t.ID) {
+                        found = true;
+                        goto DONE;
+                    }
+                }
+            }
+            DONE:
+            if(!found) {
+                log::logThis(ERROR, "Input DAG is invalid. (A vertex with OUT type must have at least one edge in from other vertices.)");
+                return;
+            }
+        }
+    }
 }
 
 void DAG::parseGraphDotString(std::string graphStrDot) {
